@@ -1,0 +1,22 @@
+#!/bin/bash
+set -euo pipefail
+
+usage() {
+  echo "Usage: $0 -h <host>"
+  exit 1
+}
+
+HOST=""
+
+while getopts ":h:" opt; do
+  case "$opt" in
+    h) HOST="$OPTARG" ;;
+    *) usage ;;
+  esac
+done
+
+if [ -z "$HOST" ]; then
+  usage
+fi
+
+rsync -avz --exclude-from='.rsyncignore' "$(pwd)" "$HOST:~/projects"
