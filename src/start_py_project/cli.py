@@ -74,6 +74,7 @@ def main() -> None:
     write_file(
         project_dir / "install_remote.sh", read_template("install_remote.sh.tmpl")
     )
+    write_file(project_dir / ".env.sh", read_template("env.sh.tmpl"))
 
     make_executable(project_dir / "sync_to.sh")
     make_executable(project_dir / "install_remote.sh")

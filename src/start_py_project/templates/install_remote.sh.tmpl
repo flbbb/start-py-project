@@ -1,31 +1,25 @@
 #!/bin/bash
 set -euo pipefail
 
-if [ -z "${1:-}" ]; then
-  echo "Usage: $0 <env_name>"
-  exit 1
-fi
 
-ENV_NAME=$1
-SET_ENV_SCRIPT="set_${ENV_NAME}.sh"
+SET_ENV_SCRIPT="set_env.sh"
 
 # Create the environment setup script
 cat <<EOL > "$SET_ENV_SCRIPT"
 
 module purge
-load_modules
-conda activate ${ENV_NAME}
+source _load_modules
+source .venv/bin/activate
 
 source .env.sh
 
 EOL
 
 # Source the environment setup script
-conda create -y -n ${ENV_NAME} python=3.11
+uv venv --python 3.11
 source "$SET_ENV_SCRIPT"
 
-# Install pytorch
-pip install torch
+
 # Install the current directory as a package
 pip install -e .
 
